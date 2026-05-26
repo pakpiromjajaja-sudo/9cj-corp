@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TATO Skills OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0d;
+  --bg2: #141414;
+  --bg3: #1c1c1c;
+  --bg4: #242424;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f0ede8;
+  --text2: #8a8680;
+  --text3: #5a5754;
+  --accent: #c8b89a;
+  --accent2: #8b6e4e;
+  --coral: #d4654a;
+  --coral-bg: rgba(212,101,74,0.12);
+  --amber: #c49a3c;
+  --amber-bg: rgba(196,154,60,0.12);
+  --green: #5a8a4a;
+  --green-bg: rgba(90,138,74,0.12);
+  --teal: #3a8a7a;
+  --teal-bg: rgba(58,138,122,0.12);
+  --blue: #4a7ab8;
+  --blue-bg: rgba(74,122,184,0.12);
+  --purple: #7a5ab8;
+  --purple-bg: rgba(122,90,184,0.12);
+  --r: 8px;
+  --r2: 14px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Noto Sans Thai', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+/* LAYOUT */
+.app { display: flex; height: 100vh; overflow: hidden; }
+.sidebar { width: 240px; min-width: 240px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+.main { flex: 1; overflow-y: auto; }
+
+/* SIDEBAR */
+.sidebar-logo { padding: 24px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-logo h1 { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.sidebar-logo p { font-size: 11px; color: var(--text3); margin-top: 3px; font-family: var(--font-mono); }
+
+.nav-section { padding: 16px 12px 4px; }
+.nav-section-label { font-size: 10px; font-family: var(--font-mono); color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: var(--r); cursor: pointer; transition: all 0.15s; color: var(--text2); font-size: 13px; border: none; background: none; width: 100%; text-align: left; }
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: var(--bg4); color: var(--text); }
+.nav-item .nav-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.nav-count { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--text3); background: var(--bg4); padding: 2px 6px; border-radius: 20px; }
+
+.phase-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: var(--coral); }
+.dot-amber { background: var(--amber); }
+.dot-green { background: var(--green); }
+
+.sidebar-stats { margin-top: auto; padding: 16px; border-top: 1px solid var(--border); }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.stat-label { font-size: 11px; color: var(--text3); }
+.stat-val { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
+
+/* MAIN HEADER */
+.main-header { padding: 28px 32px 0; border-bottom: 1px solid var(--border); }
+.breadcrumb { font-family: var(--font-mono); font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+.main-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+.main-sub { font-size: 13px; color: var(--text2); margin-top: 5px; line-height: 1.5; }
+.header-actions { display: flex; gap: 8px; margin-top: 20px; padding-bottom: 0; }
+.tab-btn { padding: 8px 16px; border-radius: var(--r) var(--r) 0 0; border: 1px solid transparent; border-bottom: none; font-size: 12px; cursor: pointer; background: none; color: var(--text2); transition: all 0.15s; font-family: var(--font-body); }
+.tab-btn.active { background: var(--bg3); color: var(--text); border-color: var(--border); }
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+/* CONTENT */
+.content { padding: 24px 32px; }
+
+/* SKILL GRID */
+.section-block { margin-bottom: 32px; }
+.section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.section-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--bg4); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+.section-name { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--text); }
+.section-desc { font-size: 12px; color: var(--text3); margin-top: 1px; }
+
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.skill-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 16px; cursor: pointer; transition: all 0.15s; position: relative; }
+.skill-card:hover { border-color: var(--border2); background: var(--bg3); transform: translateY(-1px); }
+.skill-card.done { opacity: 0.6; }
+.skill-card.done::after { content: '✓'; position: absolute; top: 12px; right: 12px; font-size: 12px; color: var(--green); }
+.skill-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.skill-name { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); }
+.skill-desc { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 10px; }
+.badge { display: inline-flex; align-items: center; font-size: 10px; font-family: var(--font-mono); padding: 3px 8px; border-radius: 20px; gap: 4px; }
+.badge-coral { background: var(--coral-bg); color: var(--coral); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); }
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-teal { background: var(--teal-bg); color: var(--teal); }
+.badge-blue { background: var(--blue-bg); color: var(--blue); }
+.badge-purple { background: var(--purple-bg); color: var(--purple); }
+
+/* PHASE HEADER */
+.phase-banner { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--bg2); margin-bottom: 24px; }
+.phase-num { font-family: var(--font-mono); font-size: 10px; color: var(--text3); }
+.phase-title { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); }
+.phase-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.phase-progress { margin-left: auto; text-align: right; }
+.phase-pct { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.phase-bar { width: 80px; height: 3px; background: var(--bg4); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.phase-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+
+/* MODAL / PROMPT DRAWER */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; justify-content: center; }
+.overlay.open { display: flex; }
+.drawer { background: var(--bg2); border-top: 1px solid var(--border2); border-radius: 20px 20px 0 0; width: 100%; max-width: 860px; max-height: 88vh; overflow-y: auto; padding: 32px; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.drawer-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--text); }
+.drawer-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+.close-btn { width: 32px; height: 32px; border-radius: 50%; background: var(--bg4); border: none; color: var(--text2); cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; }
+.close-btn:hover { background: var(--bg3); color: var(--text); }
+
+.drawer-section { margin-bottom: 20px; }
+.drawer-label { font-family: var(--font-mono); font-size: 10px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+.prompt-area { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r2); padding: 16px 18px; font-family: var(--font-mono); font-size: 12px; color: var(--text); line-height: 1.7; white-space: pre-wrap; min-height: 160px; }
+.tip-box { background: var(--amber-bg); border: 1px solid rgba(196,154,60,0.2); border-radius: var(--r); padding: 12px 14px; font-size: 12px; color: #d4b060; line-height: 1.6; }
+.drawer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: var(--r); font-size: 13px; cursor: pointer; border: 1px solid var(--border); background: var(--bg3); color: var(--text); font-family: var(--font-body); transition: all 0.15s; }
+.btn:hover { background: var(--bg4); border-color: var(--border2); }
+.btn-primary { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-primary:hover { background: var(--accent); border-color: var(--accent); color: #0d0d0d; }
+.btn-green { background: var(--green-bg); border-color: rgba(90,138,74,0.3); color: var(--green); }
+.btn-green:hover { background: rgba(90,138,74,0.25); }
+.btn-done { background: var(--green-bg); border-color: rgba(90,138,74,0.3); color: var(--green); }
+
+/* PROJECT VIEW */
+.project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.project-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 20px; }
+.project-card-name { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.project-card-date { font-family: var(--font-mono); font-size: 10px; color: var(--text3); margin-bottom: 12px; }
+.project-skills { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+.project-skill-pill { font-size: 10px; padding: 3px 8px; border-radius: 20px; background: var(--bg4); color: var(--text2); border: 1px solid var(--border); }
+.project-actions { display: flex; gap: 8px; }
+.mini-btn { font-size: 11px; padding: 5px 10px; border-radius: 6px; cursor: pointer; border: 1px solid var(--border); background: var(--bg3); color: var(--text2); font-family: var(--font-body); transition: all 0.15s; }
+.mini-btn:hover { color: var(--text); border-color: var(--border2); }
+.mini-btn.danger { color: #d44; border-color: rgba(220,60,60,0.2); }
+.mini-btn.danger:hover { background: rgba(220,60,60,0.1); }
+
+/* NEW PROJECT */
+.new-project-area { background: var(--bg2); border: 1px dashed var(--border2); border-radius: var(--r2); padding: 20px; margin-bottom: 20px; }
+.new-project-area h3 { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
+.form-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group label { font-size: 11px; color: var(--text3); font-family: var(--font-mono); }
+.form-input { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 8px 12px; color: var(--text); font-size: 13px; font-family: var(--font-body); outline: none; transition: border-color 0.15s; }
+.form-input:focus { border-color: var(--border2); }
+.form-input::placeholder { color: var(--text3); }
+
+/* PROGRESS VIEW */
+.progress-overview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 18px; }
+.stat-card-val { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--text); }
+.stat-card-label { font-size: 12px; color: var(--text3); margin-top: 4px; }
+.stat-card-sub { font-family: var(--font-mono); font-size: 10px; color: var(--accent); margin-top: 6px; }
+
+.checklist-section { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); overflow: hidden; margin-bottom: 16px; }
+.checklist-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.checklist-title { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text); }
+.checklist-item { display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item:hover { background: var(--bg3); }
+.check-box { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.check-box.checked { background: var(--green); border-color: var(--green); }
+.check-box.checked::after { content: '✓'; font-size: 9px; color: #fff; }
+.checklist-name { font-size: 13px; color: var(--text); flex: 1; }
+.checklist-item.checked-item .checklist-name { color: var(--text3); text-decoration: line-through; }
+.checklist-badge { margin-left: auto; }
+
+/* SEARCH */
+.search-bar { display: flex; align-items: center; gap: 10px; padding: 12px 32px; border-bottom: 1px solid var(--border); background: var(--bg2); position: sticky; top: 0; z-index: 10; }
+.search-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 8px 14px; color: var(--text); font-size: 13px; font-family: var(--font-body); outline: none; }
+.search-input:focus { border-color: var(--border2); }
+.search-input::placeholder { color: var(--text3); }
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-pill { font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); background: none; color: var(--text2); cursor: pointer; font-family: var(--font-body); transition: all 0.15s; }
+.filter-pill.active { background: var(--bg4); color: var(--text); border-color: var(--border2); }
+.filter-pill:hover { color: var(--text); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--r); padding: 10px 16px; font-size: 12px; color: var(--text); z-index: 999; transform: translateY(60px); opacity: 0; transition: all 0.25s; font-family: var(--font-mono); }
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* UTIL */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 13px; }
+.empty-icon { font-size: 32px; margin-bottom: 10px; opacity: 0.4; }
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <h1>TATO Skills OS</h1>
+      <p>v1.0 · 24 skills · 3 phases</p>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Views</div>
+      <button class="nav-item active" onclick="setView('skills')">
+        <span class="nav-icon">⚡</span> All Skills <span class="nav-count">24</span>
+      </button>
+      <button class="nav-item" onclick="setView('progress')">
+        <span class="nav-icon">📊</span> Progress
+      </button>
+      <button class="nav-item" onclick="setView('projects')">
+        <span class="nav-icon">📁</span> Projects <span class="nav-count" id="proj-count">0</span>
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Phases</div>
+      <button class="nav-item" onclick="filterPhase(1)">
+        <span class="phase-dot dot-red"></span> Phase 1 — สร้างรายรับ <span class="nav-count">8</span>
+      </button>
+      <button class="nav-item" onclick="filterPhase(2)">
+        <span class="phase-dot dot-amber"></span> Phase 2 — รักษา+ดึง <span class="nav-count">8</span>
+      </button>
+      <button class="nav-item" onclick="filterPhase(3)">
+        <span class="phase-dot dot-green"></span> Phase 3 — ควบคุม+ขยาย <span class="nav-count">8</span>
+      </button>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Categories</div>
+      <button class="nav-item" onclick="filterCat('Sales')">
+        <span class="nav-icon">🎯</span> Sales & Growth
+      </button>
+      <button class="nav-item" onclick="filterCat('Product')">
+        <span class="nav-icon">🛠</span> Product & Dev
+      </button>
+      <button class="nav-item" onclick="filterCat('Customer')">
+        <span class="nav-icon">💛</span> Customer Success
+      </button>
+      <button class="nav-item" onclick="filterCat('Content')">
+        <span class="nav-icon">📢</span> Content & SEO
+      </button>
+      <button class="nav-item" onclick="filterCat('Finance')">
+        <span class="nav-icon">📈</span> Finance & Analytics
+      </button>
+      <button class="nav-item" onclick="filterCat('Marketing')">
+        <span class="nav-icon">⚡</span> Performance Mktg
+      </button>
+    </div>
+
+    <div class="sidebar-stats">
+      <div class="stat-row"><span class="stat-label">Completed</span><span class="stat-val" id="stat-done">0/24</span></div>
+      <div class="stat-row"><span class="stat-label">Projects</span><span class="stat-val" id="stat-proj">0</span></div>
+      <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-val" id="stat-phase">1</span></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <!-- Skills View -->
+    <div id="view-skills">
+      <div class="search-bar">
+        <input class="search-input" id="search-input" placeholder="ค้นหา skill..." oninput="renderSkills()">
+        <div class="filter-pills" id="filter-pills">
+          <button class="filter-pill active" onclick="setFilter('all')">ทั้งหมด</button>
+          <button class="filter-pill" onclick="setFilter('todo')">ยังไม่ได้ทำ</button>
+          <button class="filter-pill" onclick="setFilter('done')">ทำแล้ว</button>
+          <button class="filter-pill badge-coral" onclick="setFilter('coral')">รายรับ</button>
+          <button class="filter-pill badge-amber" onclick="setFilter('amber')">ปิดขาย</button>
+          <button class="filter-pill badge-green" onclick="setFilter('green')">Dev</button>
+        </div>
+      </div>
+      <div class="content" id="skills-content"></div>
+    </div>
+
+    <!-- Progress View -->
+    <div id="view-progress" style="display:none">
+      <div class="main-header">
+        <div class="breadcrumb">TATO Skills OS / Progress</div>
+        <div class="main-title">Progress Tracker</div>
+        <div class="main-sub">ติดตามว่าใช้ skill ไหนไปแล้ว และ phase ไหนที่ยังค้างอยู่</div>
+        <div class="header-actions" style="padding-bottom:16px;border-bottom:1px solid var(--border)"></div>
+      </div>
+      <div class="content" id="progress-content"></div>
+    </div>
+
+    <!-- Projects View -->
+    <div id="view-projects" style="display:none">
+      <div class="main-header">
+        <div class="breadcrumb">TATO Skills OS / Projects</div>
+        <div class="main-title">Projects</div>
+        <div class="main-sub">สร้าง project และเลือก skill ที่ใช้ใน project นั้น</div>
+        <div class="header-actions" style="padding-bottom:16px;border-bottom:1px solid var(--border)"></div>
+      </div>
+      <div class="content" id="projects-content"></div>
+    </div>
+  </main>
+</div>
+
+<!-- PROMPT DRAWER -->
+<div class="overlay" id="overlay" onclick="closeDrawer(event)">
+  <div class="drawer" id="drawer">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-title" id="drawer-title"></div>
+        <div class="drawer-sub" id="drawer-sub"></div>
+      </div>
+      <button class="close-btn" onclick="closeDrawerNow()">✕</button>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">Prompt สำเร็จรูป — เติมข้อมูลใน [วงเล็บ] แล้ว copy ไปใช้</div>
+      <div class="prompt-area" id="drawer-prompt"></div>
+    </div>
+    <div class="drawer-section" id="drawer-tip-wrap">
+      <div class="drawer-label">💡 Pro Tip</div>
+      <div class="tip-box" id="drawer-tip"></div>
+    </div>
+    <div class="drawer-section">
+      <div class="drawer-label">Actions</div>
+      <div class="drawer-actions">
+        <button class="btn btn-primary" onclick="copyCurrentPrompt()">📋 Copy Prompt</button>
+        <button class="btn btn-green" id="done-toggle-btn" onclick="toggleDone()">✓ Mark as Done</button>
+        <button class="btn" onclick="addToProject()">📁 Add to Project</button>
+      </div>
+    </div>
+    <div id="drawer-add-project" style="display:none;margin-top:12px">
+      <div class="drawer-label">เลือก project</div>
+      <div id="project-selector"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SKILLS = [
+  // PHASE 1 - Sales & Growth
+  { id:'s1', phase:1, cat:'Sales', name:'Cold Outreach AI', desc:'เขียน DM / email ส่วนตัวทีละคน', badge:'coral', badgeText:'รายรับโดยตรง',
+    prompt:`คุณคือ copywriter เชี่ยวชาญ B2B outreach
+
+เขียน cold DM/email สำหรับ:
+- ลูกค้าเป้าหมาย: [ชื่อ / บริษัท / role]
+- ปัญหาที่เราแก้: [ปัญหา]
+- สิ่งที่เราเสนอ: [product/service]
+- tone: เป็นกันเอง ไม่ขายของ
+
+ให้เขียน 3 เวอร์ชัน:
+1. สั้น (3 บรรทัด — DM/Twitter)
+2. กลาง (5 บรรทัด — LinkedIn)
+3. ยาว (email เต็ม + subject line)
+
+แต่ละเวอร์ชันต้องมี hook แรกที่จับใจ และ CTA ชัดเจน`,
+    tip:'เปลี่ยน [ในวงเล็บ] ให้ตรงกับลูกค้าแต่ละคน ยิ่ง specific ยิ่ง reply rate สูง' },
+
+  { id:'s2', phase:1, cat:'Sales', name:'Demo Script Writer', desc:'สคริปต์ demo + objection handling', badge:'amber', badgeText:'ปิดการขาย',
+    prompt:`เขียนสคริปต์ demo call 30 นาทีสำหรับ:
+- Product: [ชื่อ product]
+- ลูกค้า: [industry / role / company size]
+- Pain point หลัก: [ปัญหา]
+- Feature เด่น 3 อย่าง: [feature 1], [feature 2], [feature 3]
+
+โครงสร้าง:
+1. Opening hook (2 นาที) — ทำให้เขาพูดก่อน
+2. Discovery questions (5 นาที) — 4 คำถามเปิด
+3. Demo flow (15 นาที) — ตาม pain ไม่ตาม feature
+4. Objection handling:
+   - "ราคาแพงไป" → [response]
+   - "ยังไม่พร้อม" → [response]
+   - "ต้องปรึกษาทีมก่อน" → [response]
+5. Closing + next step ที่ชัดเจน`,
+    tip:'Practice 1 รอบก่อน call จริง — ลด filler words 80%' },
+
+  { id:'s3', phase:1, cat:'Sales', name:'Proposal Generator', desc:'ใบเสนอราคา + proposal อัตโนมัติ', badge:'amber', badgeText:'ปิดการขาย',
+    prompt:`สร้าง proposal สำหรับ:
+- ลูกค้า: [ชื่อบริษัท / contact person]
+- ปัญหาที่พวกเขามี: [ปัญหาจาก discovery call]
+- Solution ที่เราเสนอ: [solution]
+- Pricing tiers:
+  Starter: [฿/เดือน] — [features]
+  Pro: [฿/เดือน] — [features]
+  Enterprise: [custom]
+- Timeline: [กี่สัปดาห์/เดือน]
+- Risk reversal: [guarantee หรือ trial]
+
+Format: Executive summary → Problem → Solution → Why Us → Pricing → Timeline → FAQs → Next Step`,
+    tip:'ส่งภายใน 24 ชั่วโมงหลัง discovery call — conversion rate ดีกว่ารอ 3x' },
+
+  { id:'s4', phase:1, cat:'Sales', name:'Follow-up Sequencer', desc:'ลำดับ follow-up 7 วัน auto', badge:'coral', badgeText:'รายรับโดยตรง',
+    prompt:`เขียน follow-up sequence 7 วันหลัง demo/proposal สำหรับ:
+- ลูกค้าที่ยังไม่ตอบ
+- Product: [ชื่อ]
+- สิ่งที่ discuss ครั้งล่าสุด: [สรุปสั้น]
+
+วัน 1: Thank you + recap value ที่คุยกัน
+วัน 3: Value add — tip / stat / case study ที่เกี่ยว
+วัน 5: Soft check-in — "มีคำถามไหม?"
+วัน 7: Last call + clear CTA + offer deadline (ถ้ามี)
+
+แต่ละข้อความ:
+- ไม่เกิน 5 บรรทัด
+- Tone เป็นกันเอง ไม่ pushy
+- Subject line สำหรับ email`,
+    tip:'80% ของยอดขายเกิดหลัง follow-up ครั้งที่ 5+ อย่าหยุดเร็ว' },
+
+  // PHASE 1 - Product & Dev
+  { id:'s5', phase:1, cat:'Product', name:'MVP Feature Builder', desc:'สร้าง feature หลักจาก spec', badge:'green', badgeText:'สร้างสินค้า',
+    prompt:`คุณคือ senior full-stack developer
+
+สร้าง feature นี้จาก spec:
+- Feature: [ชื่อ feature]
+- User story: "As a [user], I want to [action] so that [benefit]"
+- Tech stack: [React/Next.js/etc] + [backend: Node/Python/etc]
+- Database: [PostgreSQL/MongoDB/etc]
+- Acceptance criteria:
+  1. [เงื่อนไข 1]
+  2. [เงื่อนไข 2]
+  3. [เงื่อนไข 3]
+
+ส่งตามลำดับ:
+1. Database schema
+2. API endpoints (RESTful)
+3. React component หลัก
+4. Error handling
+5. Unit test cases`,
+    tip:'เขียน acceptance criteria ก่อนเสมอ — ลด back-and-forth กับ dev 70%' },
+
+  { id:'s6', phase:1, cat:'Product', name:'Bug Fixer & QA', desc:'หาบัคก่อน user เจอ', badge:'teal', badgeText:'คุณภาพ',
+    prompt:`ช่วย debug และ QA code นี้:
+
+[วาง code ที่มีปัญหา]
+
+Error message: [error ที่เจอ]
+Expected behavior: [ควรทำอะไร]
+Actual behavior: [ทำอะไรจริงๆ]
+Environment: [Node version, browser, OS]
+
+ขอ:
+1. Root cause analysis — ทำไมถึงเกิด
+2. Fix พร้อม explanation ทีละบรรทัด
+3. Edge cases ที่ควร test (อย่างน้อย 5)
+4. วิธีป้องกันไม่ให้เกิดซ้ำ
+5. Code review feedback เพิ่มเติม`,
+    tip:'วาง error message ทั้งหมด ไม่ใช่แค่บรรทัดสุดท้าย — ได้คำตอบไวกว่า 3x' },
+
+  { id:'s7', phase:1, cat:'Product', name:'User Story Writer', desc:'เปลี่ยน feedback → backlog', badge:'green', badgeText:'สร้างสินค้า',
+    prompt:`เปลี่ยน user feedback นี้เป็น structured user stories:
+
+Feedback raw:
+[วาง feedback จาก user interview / support ticket / review]
+
+สำหรับแต่ละ story ที่ extract ได้:
+- Title (verb + noun)
+- As a [persona], I want [feature] so that [benefit]
+- Acceptance criteria (Given / When / Then format)
+- Priority: P0 (critical) / P1 (important) / P2 (nice-to-have)
+- Story points: S (1-2d) / M (3-5d) / L (1-2w)
+- Dependencies กับ story อื่น
+- Edge cases ที่ต้องระวัง
+
+จัดกลุ่มตาม epic และเรียงตาม priority`,
+    tip:'รัน feedback ทุก batch หลังจากสัมภาษณ์ลูกค้า 5+ คน สะสม pattern' },
+
+  { id:'s8', phase:1, cat:'Product', name:'Onboarding Flow', desc:'ออกแบบ onboarding ลด churn วันแรก', badge:'purple', badgeText:'รักษาลูกค้า',
+    prompt:`ออกแบบ onboarding flow สำหรับ:
+- Product: [ชื่อ]
+- User persona: [ใคร / ทำอะไร / goal คืออะไร]
+- Aha moment: [moment ที่ user เห็นคุณค่าครั้งแรก]
+- เวลาที่ยอมรับได้: [target < กี่นาที]
+- Constraints: [ต้องกรอกอะไร / integration ที่ต้องมี]
+
+ส่งมา:
+1. Step-by-step flow (max 5 steps พร้อม progress bar)
+2. Copy สำหรับแต่ละ step (headline + body + CTA)
+3. Empty state design สำหรับ new user
+4. Email sequence: วันที่ 0, 1, 3, 7
+5. Success metric — วัด aha moment ยังไง`,
+    tip:'ลูกค้าที่ reach aha moment ใน 5 นาทีแรก churn น้อยกว่า 3x — ลด step ไม่ใช่เพิ่ม' },
+
+  // PHASE 2 - Customer Success
+  { id:'s9', phase:2, cat:'Customer', name:'Support Bot Builder', desc:'ตอบ FAQ + ticket อัตโนมัติ 24h', badge:'purple', badgeText:'รักษาลูกค้า',
+    prompt:`สร้าง knowledge base + response templates สำหรับ support bot:
+
+Product: [ชื่อ]
+Top 10 คำถามที่รับบ่อย:
+1. [คำถาม]
+2. [คำถาม]
+... (เติมให้ครบ 10)
+
+สำหรับแต่ละคำถาม:
+- Intent variations (5 แบบที่ user อาจถาม)
+- คำตอบสั้น (1-2 ประโยค สำหรับ chat)
+- คำตอบยาว (step-by-step สำหรับ help doc)
+- เมื่อไหร่ควร escalate ไป human
+- Follow-up question ที่ควรถาม
+
+รูปแบบ: JSON-ready สำหรับใส่ใน chatbot platform`,
+    tip:'เริ่มจาก 10 คำถามที่ตอบซ้ำมากที่สุด — ประหยัด support time 60% ได้เลย' },
+
+  { id:'s10', phase:2, cat:'Customer', name:'Churn Predictor', desc:'วิเคราะห์สัญญาณเสี่ยงออก', badge:'blue', badgeText:'MRR คงอยู่',
+    prompt:`วิเคราะห์ข้อมูลลูกค้านี้และหา churn signals:
+
+ข้อมูลลูกค้า:
+- ชื่อ/บริษัท: [ชื่อ]
+- Last login: [วันที่]
+- Feature usage 30 วันล่าสุด: [list features + จำนวนครั้ง]
+- Support tickets: [จำนวน + ประเด็น]
+- NPS score: [0-10]
+- Plan: [tier] / อายุ account: [เดือน]
+- Billing status: [ok / late / failed]
+
+ประเมิน:
+1. Churn risk score: Low / Medium / High / Critical
+2. สัญญาณที่เห็น (ranked by severity)
+3. Root cause ที่น่าจะเป็น
+4. Action ที่ควรทำภายใน 24h / 7 วัน
+5. ข้อความ re-engagement ที่เหมาะสม`,
+    tip:'รันทุกสัปดาห์กับ account ที่ usage ลดลง 20%+ — จับก่อน cancel ได้ทัน' },
+
+  { id:'s11', phase:2, cat:'Customer', name:'Upsell Prompter', desc:'หาจังหวะเสนอ plan สูงกว่า', badge:'teal', badgeText:'เพิ่ม MRR',
+    prompt:`หาโอกาส upsell สำหรับลูกค้านี้:
+
+ลูกค้า: [ชื่อ / plan ปัจจุบัน / เดือนที่ใช้]
+Usage data:
+- Feature ที่ใช้บ่อย: [list]
+- Limit ที่ใกล้เต็ม: [storage/seats/API calls/etc]
+- Feature tier สูงกว่าที่ยังไม่ได้ใช้: [list]
+
+ส่งมา:
+1. Upsell readiness score (1-10)
+2. Trigger ที่เหมาะ (timing + reason)
+3. Value proposition เฉพาะ use case เขา
+4. Email / in-app message script
+5. Objection handling: ราคา / ไม่จำเป็น / ต้องปรึกษา
+6. ROI calculation ง่ายๆ — ประหยัด/ได้ [X] ต่อเดือน`,
+    tip:'User ที่ใช้ feature 80%+ ของ plan คือ upsell candidate — ชัวร์กว่า cold call มาก' },
+
+  { id:'s12', phase:2, cat:'Customer', name:'Success Check-in', desc:'email ส่วนตัวทุกเดือน', badge:'purple', badgeText:'รักษาลูกค้า',
+    prompt:`เขียน monthly success check-in email สำหรับ:
+
+ลูกค้า: [ชื่อ / บริษัท / plan]
+สิ่งที่ accomplish ในเดือนนี้:
+- Metric: [จำนวน/ผล]
+- Feature ที่ใช้มากสุด: [feature]
+Feature ใหม่ที่ launch เดือนนี้: [feature + benefit]
+Tip เฉพาะ use case เขา: [tip]
+
+ส่งมา:
+- Subject line 3 แบบ (A/B/C test)
+- Email 150-200 คำ
+- Tone: อบอุ่น เป็นกันเอง เหมือนเพื่อนที่แคร์
+- CTA 1 อย่างเท่านั้น (ชัดเจน)
+- P.S. ที่ personal`,
+    tip:'ส่งทุกวันที่ 1 ของเดือน — open rate สูงกว่า newsletter 3x เพราะ personalized' },
+
+  // PHASE 2 - Content & SEO
+  { id:'s13', phase:2, cat:'Content', name:'SEO Content Writer', desc:'บทความ rank หน้า 1 ใน 90 วัน', badge:'coral', badgeText:'ดึงลูกค้า',
+    prompt:`เขียนบทความ SEO สำหรับ:
+
+Keyword หลัก: [keyword]
+Search intent: [informational / transactional / navigational]
+Target audience: [persona + ระดับความรู้]
+Volume/difficulty: [ถ้ามีจาก Ahrefs/SEMrush]
+
+Competitor ที่ rank top 3:
+1. [URL] — จุดอ่อน: [อะไร]
+2. [URL] — จุดอ่อน: [อะไร]
+
+ส่งมา:
+1. Title tag (60 chars) + Meta description (155 chars)
+2. H1 + Outline พร้อม H2/H3 ทั้งหมด
+3. บทความ 1,500-2,000 คำ (เน้น depth ไม่เน้น filler)
+4. Internal link suggestions (3-5 หัวข้อ)
+5. FAQ section สำหรับ People Also Ask
+6. Schema markup แนะนำ`,
+    tip:'ใช้ Ahrefs/SEMrush หา keyword KD < 30 ก่อน แล้วค่อยรัน prompt นี้' },
+
+  { id:'s14', phase:2, cat:'Content', name:'LinkedIn Ghostwriter', desc:'โพสต์ founder-led growth ทุกสัปดาห์', badge:'coral', badgeText:'ดึงลูกค้า',
+    prompt:`เขียน LinkedIn post สำหรับ founder:
+
+หัวข้อ / story ที่อยากเล่า: [เรื่อง]
+Key insight ที่อยากให้คนจำ: [insight]
+Audience: [ICP — ใคร / ทำอะไร / pain point]
+Tone: authentic, direct, ไม่ขายของ
+
+ส่งมา:
+- Hook 3 แบบ (ประโยคแรก — สั้น เด้ง จบในบรรทัดเดียว)
+- โพสต์เต็ม 150-200 คำ
+- Hashtag 3-5 อัน (ไม่ใช่ generic)
+- Best time to post
+- Carousel version: 5 slides (title + 3 points + CTA)
+- Thread version สำหรับ X/Twitter`,
+    tip:'โพสต์ที่เล่า failure/lesson ได้ engagement 5x — คน engage เพราะ truth ไม่ใช่ polish' },
+
+  { id:'s15', phase:2, cat:'Content', name:'Case Study Builder', desc:'เปลี่ยน win → social proof', badge:'amber', badgeText:'ปิดการขาย',
+    prompt:`เขียน case study จากข้อมูลลูกค้านี้:
+
+ลูกค้า: [ชื่อบริษัท / industry / size]
+Before — ปัญหาก่อนใช้: [situation + ตัวเลข]
+Solution — วิธีที่ใช้: [features / approach / timeline]
+After — ผลลัพธ์ที่วัดได้:
+- [metric 1]: จาก X → Y (Z%)
+- [metric 2]: จาก X → Y
+Quote จากลูกค้า: "[ถ้ามี]" — [ชื่อ, role]
+
+ส่งมา:
+1. Headline (result-focused, under 10 words)
+2. Case study เต็ม 500-700 คำ
+3. Website snippet (50 คำ)
+4. LinkedIn post version
+5. Sales deck slide (bullet points)`,
+    tip:'ขอ metrics จริงจากลูกค้าก่อนเขียน — case study ที่มีตัวเลขปิดขายได้เอง' },
+
+  { id:'s16', phase:2, cat:'Content', name:'Newsletter Engine', desc:'nurture sequence สำหรับ free users', badge:'coral', badgeText:'ดึงลูกค้า',
+    prompt:`สร้าง email nurture sequence 5 ฉบับสำหรับ free users:
+
+Product: [ชื่อ]
+Free tier limitations: [อะไรที่ทำไม่ได้]
+Aha moment: [feature / value ที่สำคัญที่สุด]
+Main objection to upgrade: [เหตุผลที่ไม่ยอม pay]
+
+Email 1 (Day 0): Welcome + quick win ทันที
+Email 2 (Day 3): Feature spotlight ที่ underused
+Email 3 (Day 7): Social proof — customer story
+Email 4 (Day 14): Overcome main objection
+Email 5 (Day 21): Upgrade offer + deadline
+
+แต่ละฉบับ:
+- Subject line (+ A/B variant)
+- Preview text (90 chars)
+- Body 150-200 คำ
+- CTA ชัดเจน 1 อย่าง`,
+    tip:'Test subject line ก่อน — open rate ต่างกัน 2x ด้วย subject line เดียว no cap' },
+
+  // PHASE 3 - Finance
+  { id:'s17', phase:3, cat:'Finance', name:'MRR Dashboard', desc:'รายงาน MRR, ARR, churn ทุกสัปดาห์', badge:'blue', badgeText:'ควบคุม',
+    prompt:`วิเคราะห์ตัวเลข SaaS นี้และสร้าง weekly MRR report:
+
+สัปดาห์ที่: [วันที่ - วันที่]
+New MRR: ฿[จำนวน]
+Expansion MRR: ฿[จำนวน]
+Churned MRR: ฿[จำนวน]
+Contracted MRR: ฿[จำนวน]
+Total customers: [จำนวน]
+New customers: [จำนวน]
+Churned customers: [จำนวน]
+
+คำนวณ + วิเคราะห์:
+1. Net New MRR = New + Expansion - Churned - Contracted
+2. Total MRR (cumulative)
+3. ARR = MRR × 12
+4. MRR Growth Rate %
+5. Net Revenue Churn %
+6. Quick Ratio = (New + Expansion) / (Churned + Contracted)
+7. Trend vs 4 สัปดาห์ที่แล้ว
+8. ⚠️ Warning signs + ✅ Positive signals
+9. Action items สำหรับสัปดาห์หน้า`,
+    tip:'Quick Ratio > 4 = healthy growth, 2-4 = ok, < 2 = ต้องแก้ด่วน' },
+
+  { id:'s18', phase:3, cat:'Finance', name:'Unit Economics Calc', desc:'CAC, LTV, payback period real-time', badge:'blue', badgeText:'ควบคุม',
+    prompt:`คำนวณ unit economics จากข้อมูลนี้:
+
+Revenue:
+- MRR: ฿[จำนวน]
+- ARPU: ฿[/เดือน]
+- Gross margin: [%]
+- Monthly churn rate: [%]
+
+Acquisition:
+- Sales & Marketing spend/เดือน: ฿[จำนวน]
+- New customers/เดือน: [จำนวน]
+- Conversion rate: [%]
+
+คำนวณ:
+1. LTV = ARPU × (1/Churn Rate) × Gross Margin
+2. CAC = S&M Spend / New Customers
+3. LTV:CAC ratio
+4. CAC Payback Period (เดือน)
+5. Magic Number = Net New ARR / Prior Quarter S&M
+6. สุขภาพ unit economics: ✅ ดี / ⚠️ ควรปรับ / 🚨 อันตราย
+7. Lever ที่ดีที่สุดในการปรับ (ลด CAC / เพิ่ม ARPU / ลด churn)`,
+    tip:'LTV:CAC > 3x = ดี, > 5x = พร้อม scale ads ได้เลย, < 3x = แก้ก่อน' },
+
+  { id:'s19', phase:3, cat:'Finance', name:'Runway Tracker', desc:'ประมาณ cash runway', badge:'green', badgeText:'ความอยู่รอด',
+    prompt:`คำนวณ runway และวางแผน cash flow:
+
+Financial snapshot:
+- Bank balance: ฿[จำนวน]
+- Monthly burn rate (gross): ฿[จำนวน]
+- MRR: ฿[จำนวน]
+- Net burn = Burn - MRR: ฿[คำนวณ]
+- MRR growth rate: [%/เดือน]
+
+คำนวณ:
+1. Current runway (เดือน) = Cash / Net Burn
+2. Projected runway ถ้า growth rate คงที่
+3. Break-even month (net burn = 0)
+4. Cash flow projection 12 เดือน (table)
+5. Scenarios:
+   Conservative (growth -50%): runway X เดือน
+   Base (current growth): runway Y เดือน
+   Optimistic (growth +50%): runway Z เดือน
+6. Trigger points: เมื่อไหร่ต้อง raise / cut burn`,
+    tip:'Raise หรือ cut burn เมื่อ runway เหลือ < 12 เดือน — อย่ารอถึง 6' },
+
+  { id:'s20', phase:3, cat:'Finance', name:'Growth Experiment Log', desc:'บันทึก A/B + วิเคราะห์ผล', badge:'teal', badgeText:'ขยายผล',
+    prompt:`วิเคราะห์ผล growth experiment นี้:
+
+Experiment: [ชื่อ]
+Hypothesis: "เชื่อว่า [change] จะทำให้ [metric] เพิ่มขึ้น [X]% เพราะ [reason]"
+Primary metric: [อะไร]
+Secondary metrics: [อะไร]
+
+Results:
+Control: [metric] = [ตัวเลข], n = [sample]
+Variant: [metric] = [ตัวเลข], n = [sample]
+Duration: [กี่วัน]
+Confidence level: [%]
+
+วิเคราะห์:
+1. Statistical significance (p-value)
+2. Effect size + practical significance
+3. Segment breakdown (ถ้ามี)
+4. Verdict: ✅ Ship / ❌ Don't ship / 🔄 Iterate
+5. Learning ที่ได้
+6. Next 3 experiments ที่ควรลอง`,
+    tip:'ต้อง 95% confidence ก่อน scale — ไม่งั้นเสียเงิน scale noise ไม่ใช่ signal' },
+
+  // PHASE 3 - Performance Marketing
+  { id:'s21', phase:3, cat:'Marketing', name:'Ad Copy Generator', desc:'เขียน 20 variations ใน 5 นาที', badge:'teal', badgeText:'ขยาย',
+    prompt:`เขียน ad copy สำหรับ:
+
+Product: [ชื่อ]
+Target audience: [ICP — ใคร / pain / goal]
+Unique value proposition: [ทำไมต้องเลือกเรา]
+Offer: [อะไร / ราคา / trial / guarantee]
+Objective: [awareness / traffic / conversion / retargeting]
+Budget signal: [small test / scale]
+
+เขียน:
+- 5 Headlines (30 chars — Facebook/Google)
+- 5 Primary texts (125 chars)
+- 3 Long-form copy สำหรับ Facebook (200-300 คำ)
+- 3 Short punchy copy สำหรับ TikTok/Reels (< 50 คำ)
+- 4 CTAs ที่ต่างกัน
+- Hook variations: Pain / Gain / Fear / Curiosity / Social Proof`,
+    tip:'Test 3 hooks แรกด้วยงบน้อย ($10-20/day) แล้ว scale winner — ไม่ต้อง test ทั้งหมด' },
+
+  { id:'s22', phase:3, cat:'Marketing', name:'Landing Page CRO', desc:'วิเคราะห์และแก้ conversion', badge:'teal', badgeText:'ขยาย',
+    prompt:`วิเคราะห์ landing page และให้คำแนะนำ CRO:
+
+URL: [URL] หรือ วาง content ของ page ด้านล่าง:
+[content]
+
+Context:
+- Conversion rate ปัจจุบัน: [%]
+- Traffic source หลัก: [ads / SEO / social / direct]
+- Goal: [sign up / purchase / demo request]
+- Average session duration: [วินาที]
+- Bounce rate: [%]
+
+วิเคราะห์ + แนะนำ:
+1. Above-the-fold audit (5 seconds test)
+2. Headline clarity score (1-10) + rewrite แนะนำ
+3. Value proposition strength + gaps
+4. Trust signals audit
+5. CTA optimization (text, placement, color, size)
+6. Top 5 การเปลี่ยนแปลงที่ impact สูงสุด (เรียงตาม impact)
+7. A/B test roadmap (เริ่มจากอะไรก่อน)`,
+    tip:'แก้ headline ก่อนเลย — ส่งผลต่อ conversion มากที่สุดในทุก CRO audit' },
+
+  { id:'s23', phase:3, cat:'Marketing', name:'Retargeting Script', desc:'ข้อความสำหรับคนที่เคยเข้าไม่ซื้อ', badge:'teal', badgeText:'ขยาย',
+    prompt:`เขียน retargeting ad copy สำหรับ:
+
+Product: [ชื่อ]
+Reason ที่คนไม่ซื้อ (จาก survey/data): [เหตุผลหลัก]
+
+Segment แยกตาม behavior:
+A) เข้า landing page แต่ไม่ sign up (cold abandon)
+B) Sign up แต่ไม่ผ่าน onboarding (activation fail)
+C) ใช้แล้ว inactive 30+ วัน (churn risk)
+D) Free user ไม่ยอม upgrade (monetization)
+
+สำหรับแต่ละ segment:
+1. Main angle (overcome their specific objection)
+2. Ad copy 3 แบบ (short / medium / story)
+3. Offer พิเศษ (ถ้าเหมาะ)
+4. Urgency/scarcity ที่ authentic (ไม่ fake)
+5. Exclusion criteria (ใครไม่ควร see ad นี้)`,
+    tip:'คนที่เคยเข้า page convert ได้ถูกกว่า cold audience 5-10x — ลงงบ retargetingก่อน' },
+
+  { id:'s24', phase:3, cat:'Marketing', name:'Channel Analyzer', desc:'เปรียบ ROAS แต่ละ channel', badge:'blue', badgeText:'ควบคุม',
+    prompt:`เปรียบเทียบ performance แต่ละ channel:
+
+ช่วงเวลา: [30/60/90 วัน]
+
+Channel data (กรอกที่มี):
+Facebook Ads: spend ฿[X], clicks [Y], conv [Z], revenue ฿[W]
+Google Ads: spend ฿[X], clicks [Y], conv [Z], revenue ฿[W]
+TikTok Ads: spend ฿[X], clicks [Y], conv [Z], revenue ฿[W]
+LINE Ads: spend ฿[X], clicks [Y], conv [Z], revenue ฿[W]
+Organic SEO: cost (time) ฿[X], visits [Y], conv [Z]
+Referral/Partner: cost ฿[X], leads [Y], conv [Z]
+
+วิเคราะห์:
+1. ROAS แต่ละ channel (Revenue/Spend)
+2. CPA/CAC แต่ละ channel
+3. Volume ceiling (scalability)
+4. Quality score (LTV ของ customer แต่ละ channel)
+5. Budget allocation แนะนำ (เปอร์เซ็นต์)
+6. ✅ Scale / ⏸ Hold / ❌ Cut / 🧪 Test`,
+    tip:'Scale เฉพาะ channel ที่ CAC Payback < 6 เดือน — ดูคุณภาพ ไม่ใช่แค่ volume' },
+];
+
+// APP STATE
+let state = {
+  view: 'skills',
+  filter: 'all',
+  phaseFilter: null,
+  catFilter: null,
+  search: '',
+  done: JSON.parse(localStorage.getItem('tato_done') || '[]'),
+  projects: JSON.parse(localStorage.getItem('tato_projects') || '[]'),
+  openSkill: null
+};
+
+function saveState() {
+  localStorage.setItem('tato_done', JSON.stringify(state.done));
+  localStorage.setItem('tato_projects', JSON.stringify(state.projects));
+}
+
+function setView(v) {
+  state.view = v;
+  state.phaseFilter = null;
+  state.catFilter = null;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  ['skills','progress','projects'].forEach(id => {
+    document.getElementById('view-'+id).style.display = id === v ? 'block' : 'none';
+  });
+  if (v === 'skills') renderSkills();
+  if (v === 'progress') renderProgress();
+  if (v === 'projects') renderProjects();
+}
+
+function filterPhase(p) {
+  state.phaseFilter = p;
+  state.catFilter = null;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  ['skills','progress','projects'].forEach(id => {
+    document.getElementById('view-'+id).style.display = id === 'skills' ? 'block' : 'none';
+  });
+  state.view = 'skills';
+  renderSkills();
+}
+
+function filterCat(c) {
+  state.catFilter = c;
+  state.phaseFilter = null;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  ['skills','progress','projects'].forEach(id => {
+    document.getElementById('view-'+id).style.display = id === 'skills' ? 'block' : 'none';
+  });
+  state.view = 'skills';
+  renderSkills();
+}
+
+function setFilter(f) {
+  state.filter = f;
+  document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  renderSkills();
+}
+
+const PHASE_META = {
+  1: { label:'PHASE 1 — สร้างรายรับ', sub:'เริ่มวันนี้', dot:'dot-red', barColor:'var(--coral)' },
+  2: { label:'PHASE 2 — รักษา + ดึง', sub:'หลัง MRR แรก', dot:'dot-amber', barColor:'var(--amber)' },
+  3: { label:'PHASE 3 — ควบคุม & ขยาย', sub:'ก่อน Scale Ads', dot:'dot-green', barColor:'var(--green)' },
+};
+
+const CAT_META = {
+  Sales:     { icon:'🎯', name:'Sales & Growth', desc:'เปลี่ยน lead → ลูกค้าจ่ายเงิน' },
+  Product:   { icon:'🛠', name:'Product & Dev', desc:'สร้าง feature ให้ลูกค้าจ่ายได้' },
+  Customer:  { icon:'💛', name:'Customer Success', desc:'ลด churn · เพิ่ม LTV' },
+  Content:   { icon:'📢', name:'Content & SEO', desc:'ดึง inbound lead ระยะยาว' },
+  Finance:   { icon:'📈', name:'Finance & Analytics', desc:'ตัดสินใจด้วยตัวเลข' },
+  Marketing: { icon:'⚡', name:'Performance Marketing', desc:'โฆษณาเมื่อ unit economics พร้อม' },
+};
+
+function renderSkills() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  let skills = SKILLS;
+  if (state.phaseFilter) skills = skills.filter(s => s.phase === state.phaseFilter);
+  if (state.catFilter) skills = skills.filter(s => s.cat === state.catFilter);
+  if (q) skills = skills.filter(s => s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q) || s.badgeText.toLowerCase().includes(q));
+  if (state.filter === 'todo') skills = skills.filter(s => !state.done.includes(s.id));
+  if (state.filter === 'done') skills = skills.filter(s => state.done.includes(s.id));
+  if (state.filter === 'coral') skills = skills.filter(s => s.badge === 'coral');
+  if (state.filter === 'amber') skills = skills.filter(s => s.badge === 'amber');
+  if (state.filter === 'green') skills = skills.filter(s => s.badge === 'green');
+
+  const el = document.getElementById('skills-content');
+
+  // Group by phase then cat
+  const phases = [...new Set(skills.map(s => s.phase))].sort();
+  let html = '';
+
+  if (!state.phaseFilter && !state.catFilter && !q && state.filter === 'all') {
+    // Show phase banners
+    phases.forEach(ph => {
+      const meta = PHASE_META[ph];
+      const phSkills = skills.filter(s => s.phase === ph);
+      const donePh = phSkills.filter(s => state.done.includes(s.id)).length;
+      const pct = Math.round((donePh / phSkills.length) * 100);
+      html += `<div class="phase-banner">
+        <div class="phase-dot ${meta.dot}"></div>
+        <div><div class="phase-title">${meta.label}</div><div class="phase-sub">${meta.sub}</div></div>
+        <div class="phase-progress">
+          <div class="phase-pct">${donePh}/${phSkills.length}</div>
+          <div class="phase-bar"><div class="phase-bar-fill" style="width:${pct}%;background:${meta.barColor}"></div></div>
+        </div>
+      </div>`;
+      const cats = [...new Set(phSkills.map(s => s.cat))];
+      cats.forEach(cat => {
+        const catMeta = CAT_META[cat];
+        const catSkills = phSkills.filter(s => s.cat === cat);
+        html += renderSection(catMeta, catSkills);
+      });
+    });
+  } else {
+    // Flat view
+    const cats = [...new Set(skills.map(s => s.cat))];
+    cats.forEach(cat => {
+      const catMeta = CAT_META[cat];
+      const catSkills = skills.filter(s => s.cat === cat);
+      html += renderSection(catMeta, catSkills);
+    });
+  }
+
+  if (!html) html = '<div class="empty-state"><div class="empty-icon">🔍</div>ไม่พบ skill ที่ค้นหา</div>';
+  el.innerHTML = html;
+  updateStats();
+}
+
+function renderSection(meta, skills) {
+  let cards = skills.map(s => {
+    const isDone = state.done.includes(s.id);
+    return `<div class="skill-card${isDone?' done':''}" onclick="openSkill('${s.id}')">
+      <div class="skill-card-top">
+        <div class="skill-name">${s.name}</div>
+      </div>
+      <div class="skill-desc">${s.desc}</div>
+      <span class="badge badge-${s.badge}">${s.badgeText}</span>
+    </div>`;
+  }).join('');
+  return `<div class="section-block">
+    <div class="section-head">
+      <div class="section-icon">${meta.icon}</div>
+      <div><div class="section-name">${meta.name}</div><div class="section-desc">${meta.desc}</div></div>
+    </div>
+    <div class="skill-grid">${cards}</div>
+  </div>`;
+}
+
+function openSkill(id) {
+  const s = SKILLS.find(x => x.id === id);
+  state.openSkill = id;
+  document.getElementById('drawer-title').textContent = s.name;
+  document.getElementById('drawer-sub').textContent = s.desc;
+  document.getElementById('drawer-prompt').textContent = s.prompt;
+  const tip = document.getElementById('drawer-tip');
+  const tipWrap = document.getElementById('drawer-tip-wrap');
+  if (s.tip) { tip.textContent = s.tip; tipWrap.style.display = 'block'; }
+  else tipWrap.style.display = 'none';
+  const btn = document.getElementById('done-toggle-btn');
+  const isDone = state.done.includes(id);
+  btn.textContent = isDone ? '↩ Mark as Not Done' : '✓ Mark as Done';
+  btn.className = isDone ? 'btn' : 'btn btn-green';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('drawer-add-project').style.display = 'none';
+}
+
+function closeDrawer(e) {
+  if (e.target === document.getElementById('overlay')) closeDrawerNow();
+}
+function closeDrawerNow() {
+  document.getElementById('overlay').classList.remove('open');
+  state.openSkill = null;
+}
+
+function copyCurrentPrompt() {
+  const text = document.getElementById('drawer-prompt').textContent;
+  navigator.clipboard.writeText(text).then(() => showToast('📋 Copy แล้ว! เปิด Claude แล้ววาง'));
+}
+
+function toggleDone() {
+  const id = state.openSkill;
+  if (!id) return;
+  if (state.done.includes(id)) {
+    state.done = state.done.filter(x => x !== id);
+    showToast('↩ ยกเลิก done');
+  } else {
+    state.done.push(id);
+    showToast('✅ Done! ทำเครื่องหมายแล้ว');
+  }
+  saveState();
+  const btn = document.getElementById('done-toggle-btn');
+  const isDone = state.done.includes(id);
+  btn.textContent = isDone ? '↩ Mark as Not Done' : '✓ Mark as Done';
+  btn.className = isDone ? 'btn' : 'btn btn-green';
+  renderSkills();
+  updateStats();
+}
+
+function addToProject() {
+  const wrap = document.getElementById('drawer-add-project');
+  const isVisible = wrap.style.display !== 'none';
+  if (isVisible) { wrap.style.display = 'none'; return; }
+  if (state.projects.length === 0) {
+    showToast('สร้าง project ก่อนใน Projects tab');
+    return;
+  }
+  wrap.style.display = 'block';
+  const sel = document.getElementById('project-selector');
+  sel.innerHTML = state.projects.map(p =>
+    `<button class="btn" style="margin:4px 4px 0 0" onclick="addSkillToProject('${p.id}','${state.openSkill}')">${p.name}</button>`
+  ).join('');
+}
+
+function addSkillToProject(projId, skillId) {
+  const proj = state.projects.find(p => p.id === projId);
+  if (!proj) return;
+  if (!proj.skills) proj.skills = [];
+  if (!proj.skills.includes(skillId)) {
+    proj.skills.push(skillId);
+    saveState();
+    showToast(`✅ เพิ่มใน "${proj.name}" แล้ว`);
+  } else {
+    showToast('มีอยู่ใน project นี้แล้ว');
+  }
+  document.getElementById('drawer-add-project').style.display = 'none';
+  updateStats();
+}
+
+// PROGRESS VIEW
+function renderProgress() {
+  const total = SKILLS.length;
+  const done = state.done.length;
+  const pct = Math.round((done/total)*100);
+
+  let html = `<div class="progress-overview">
+    <div class="stat-card">
+      <div class="stat-card-val">${done}</div>
+      <div class="stat-card-label">Skills completed</div>
+      <div class="stat-card-sub">${pct}% of 24 total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val">${total - done}</div>
+      <div class="stat-card-label">Skills remaining</div>
+      <div class="stat-card-sub">อีก ${total-done} skill ที่ยังไม่ได้ทำ</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val">${state.projects.length}</div>
+      <div class="stat-card-label">Active projects</div>
+      <div class="stat-card-sub">${state.projects.reduce((a,p)=>(p.skills||[]).length+a,0)} skill assignments</div>
+    </div>
+  </div>`;
+
+  [1,2,3].forEach(ph => {
+    const meta = PHASE_META[ph];
+    const phSkills = SKILLS.filter(s => s.phase === ph);
+    const donePh = phSkills.filter(s => state.done.includes(s.id)).length;
+    const pctPh = Math.round((donePh/phSkills.length)*100);
+    html += `<div class="checklist-section">
+      <div class="checklist-header">
+        <div class="phase-dot ${meta.dot}"></div>
+        <div class="checklist-title">${meta.label}</div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;color:var(--text3);font-family:var(--font-mono)">${donePh}/${phSkills.length}</span>
+          <div class="phase-bar" style="width:60px"><div class="phase-bar-fill" style="width:${pctPh}%;background:${meta.barColor}"></div></div>
+        </div>
+      </div>`;
+    phSkills.forEach(s => {
+      const isDone = state.done.includes(s.id);
+      html += `<div class="checklist-item${isDone?' checked-item':''}" onclick="toggleFromProgress('${s.id}')">
+        <div class="check-box${isDone?' checked':''}"></div>
+        <span class="checklist-name">${s.name}</span>
+        <span class="badge badge-${s.badge} checklist-badge">${s.badgeText}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  document.getElementById('progress-content').innerHTML = html;
+}
+
+function toggleFromProgress(id) {
+  if (state.done.includes(id)) {
+    state.done = state.done.filter(x => x !== id);
+  } else {
+    state.done.push(id);
+    showToast('✅ Done!');
+  }
+  saveState();
+  updateStats();
+  renderProgress();
+  renderSkills();
+}
+
+// PROJECTS VIEW
+function renderProjects() {
+  let html = `<div class="new-project-area">
+    <h3>+ สร้าง Project ใหม่</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>ชื่อ Project</label>
+        <input class="form-input" id="new-proj-name" placeholder="เช่น Launch v2.0, Q1 Growth Sprint" style="width:250px">
+      </div>
+      <div class="form-group">
+        <label>หมายเหตุ (optional)</label>
+        <input class="form-input" id="new-proj-note" placeholder="เป้าหมาย / deadline" style="width:200px">
+      </div>
+      <button class="btn btn-primary" onclick="createProject()">สร้าง Project</button>
+    </div>
+  </div>`;
+
+  if (state.projects.length === 0) {
+    html += '<div class="empty-state"><div class="empty-icon">📁</div>ยังไม่มี project<br>สร้าง project แล้วเลือก skill ที่ใช้ใน project นั้น</div>';
+  } else {
+    html += '<div class="project-grid">';
+    state.projects.forEach(p => {
+      const skills = (p.skills || []).map(id => SKILLS.find(s => s.id === id)).filter(Boolean);
+      const doneCount = skills.filter(s => state.done.includes(s.id)).length;
+      html += `<div class="project-card">
+        <div class="project-card-name">${p.name}</div>
+        <div class="project-card-date">${p.note || ''} · ${new Date(p.created).toLocaleDateString('th-TH')}</div>
+        <div style="margin-bottom:10px;font-size:12px;color:var(--text3)">${skills.length} skills · ${doneCount} done</div>
+        <div class="project-skills">
+          ${skills.map(s => `<span class="project-skill-pill">${s.name}</span>`).join('')}
+          ${skills.length === 0 ? '<span style="font-size:11px;color:var(--text3)">เพิ่ม skill ผ่าน skill card</span>' : ''}
+        </div>
+        <div class="project-actions">
+          <button class="mini-btn danger" onclick="deleteProject('${p.id}')">ลบ project</button>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('projects-content').innerHTML = html;
+  document.getElementById('proj-count').textContent = state.projects.length;
+  document.getElementById('stat-proj').textContent = state.projects.length;
+}
+
+function createProject() {
+  const name = document.getElementById('new-proj-name').value.trim();
+  if (!name) { showToast('ใส่ชื่อ project ด้วยนะ'); return; }
+  const note = document.getElementById('new-proj-note').value.trim();
+  state.projects.push({ id:'p'+Date.now(), name, note, created: Date.now(), skills:[] });
+  saveState();
+  renderProjects();
+  showToast('📁 สร้าง project แล้ว!');
+}
+
+function deleteProject(id) {
+  state.projects = state.projects.filter(p => p.id !== id);
+  saveState();
+  renderProjects();
+  showToast('🗑 ลบ project แล้ว');
+}
+
+function updateStats() {
+  document.getElementById('stat-done').textContent = `${state.done.length}/24`;
+  document.getElementById('proj-count').textContent = state.projects.length;
+  document.getElementById('stat-proj').textContent = state.projects.length;
+
+  const p1done = SKILLS.filter(s=>s.phase===1&&state.done.includes(s.id)).length;
+  const p2done = SKILLS.filter(s=>s.phase===2&&state.done.includes(s.id)).length;
+  const ph = p1done >= 8 ? 3 : p2done >= 4 ? 2 : 1;
+  document.getElementById('stat-phase').textContent = ph;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// INIT
+renderSkills();
+updateStats();
+</script>
+</body>
+</html>
